@@ -1,0 +1,3 @@
+Im Rahmen meiner Bachelorarbeit habe ich eine Web-App entwickelt, die die Verwaltung von Veranstaltungen erleichtert. Teilnehmer können durch das Absolvieren von Aufgaben Bewertungspunkte sammeln. Die Daten werden sicher und vertraulich in einer privaten Blockchain gespeichert.
+
+Die App bietet somit eine einfache Möglichkeit, Veranstaltungen zu organisieren und den Fortschritt der Teilnehmer zu verfolgen. Durch die Verwendung einer privaten Blockchain wird die Sicherheit und Integrität der Daten gewährleistet. Welche Art von Veranstaltung unterstützt wird, hängt von den Anforderungen ab und kann individuell angepasst werden. Für die Implementierung der Blockchain-Technologie wurden privatte Blockchain eingesetzt.
