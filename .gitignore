@@ -1,0 +1,4 @@
+*.txt
+*.pdf
+/literatur
+/api/multichain/config.txt

@@ -1,0 +1,96 @@
+<!DOCTYPE html >
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <script src="../../jquery-3.3.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../../bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <title>Sudent</title>
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+    <div class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <!--<label for="inputEmail" class="sr-only">Email address</label>
+        <input type="text" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>-->
+
+        <input type="text" id="matrikelNummerInput" class="form-control" placeholder="Bitte Matrikelnummer eingeben." value="1QDD9VhVdL41bniVTVTKRjzBr292KrGrhQeB7H"
+            required>
+        <input type="text" id="blockchainNameInput" class="form-control" placeholder="Bitte Blockchainname eingeben." value="verwaltung2"
+            required>
+        <input type="text" id="streamNameInput" class="form-control" placeholder="Bitte Streamname eingeben." value="gruppe1">
+        <input type="password" id="pinInput" class="form-control" placeholder="Bitte PIN eingeben." value="">
+        <input type="hidden" id="functionX" class="form-control">
+        <p></p>
+        <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>!-->
+        <button id='login' type="submit" class="btn btn-lg btn-success">login</button>
+        <button id='userButton' type="button" class="btn btn-lg btn-dark">user</button>
+        <button id='adminButton' type="button" class="btn btn-lg btn-dark">admin</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+    </div>
+
+</body>
+
+<script>
+
+    $('#userButton').prop('disabled', true);
+    $('#pinInput').hide();
+
+    $(document).ready(function () {
+
+    });
+
+    // BUTTONS
+    $('#adminButton').click(function () {
+        $('#pinInput').show();
+        $(this).prop('disabled', true);
+        $('#userButton').prop('disabled', false);
+        $('#blockchainName').hide();
+        $('#streamNameInput').hide();
+    });
+
+    $('#userButton').click(function () {
+        $('#pinInput').hide();
+        $(this).prop('disabled', true);
+        $('#adminButton').prop('disabled', false);
+        $('#streamNameInput').show();
+    });
+
+    $("#login").click(function () {
+        $('#functionX').val('login'); // Funktion setzen vom hidden Input
+        // Validiere ob leer 2DO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        var admin = $('#adminButton').is(':disabled') ? true : false; // Info
+        // Daten aus dem Formular sammeln
+
+        console.log($('#matrikelNummerInput').val());
+        // Daten Senden
+        $.post("../core/Server.php",
+            {
+                "function":
+                    { "name": $("#functionX").val() },
+                "params":
+                    {
+                        "matrikelnummer": $('#matrikelNummerInput').val(), // ID <-> primary key
+                        "blockchainName": $('#blockchainNameInput').val(), // Blockchain <-> Datenbank <-> Termin Gruppe X
+                        "streamName": $('#streamNameInput').val(), // Tabelle <-> Datenbank <-> Gruppe X
+                        "pin": $('#pinInput').val()
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + data.result.redirect + "\nStatus: " + status);
+            }, "json").done(function () {
+                window.location.replace(r.redirect);
+            });
+    });
+
+
+</script>
+
+</html>
