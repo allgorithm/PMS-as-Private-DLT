@@ -1,0 +1,538 @@
+<!DOCTYPE html >
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <script src="../../jquery-3.3.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../../bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <title>Sudent</title>
+    <!-- Custom styles for this template -->
+    <link href="admin.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <!--MENÜ-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <span id="session" class="badge badge-pill badge-danger">ADMIN</span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a id="explorer" class="nav-item nav-link active" href="#">Explorer</a>
+                    <a id="studentEintragenMenu" class="nav-item nav-link" href="#">Student eintragen</a>
+                    <a id="tokenErstellenMenu" class="nav-item nav-link" href="#">Token erstellen</a>
+                    <a id="streamErstellenMenu" class="nav-item nav-link" href="#">Stream erstellen</a>
+                    <button id="tokenSendenMenu" class="btn btn-outline-success my-2 my-sm-0" type="submit">bestanden</button>
+                    <button id="logoutButton" class="btn btn-outline-danger my-2 my-sm-0" type="submit">logout</button>
+                </div>
+            </div>
+        </nav>
+        <!--EXPLORER-->
+        <div class="explorer">
+            <div class="col-3">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span id="titel">
+                            <!--JQUERY-->
+                        </span>
+                        <span id="anz" class="badge badge-primary badge-pill">
+                            <!--JQUERY-->
+                        </span>
+                    </li>
+                </ul>
+                <br>
+                <ul id="menuLeft" class="list-group">
+                    <!--JQUERY-->
+                </ul>
+            </div>
+            <div id="colX" class="col-9">
+                <table id="tabelleStudentInfo" class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Tabelle [stream]</th>
+                            <th scope="col">Matrikel [ID]</th>
+                            <th scope="col">Wallet</th>
+                            <th scope="col">Credit [token]</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentInfo">
+                        <!--JQUERY-->
+                    </tbody>
+                </table>
+                <!--STUDENT EINTRAGEN-->
+                <div id="formStudentEintragen" class="formStream">
+                    <h1 class="h3 mb-3 font-weight-normal">Bitte Matrikelnummer eingeben </h1>
+                    <input type="number" id="studentEintragenInput" class="form-control" placeholder="matrikelnummer [ID]" required>
+                    <h1 class="h3 mb-3 font-weight-normal">Bitte Tabelle auswählen</h1>
+                    <select id="streamsSelect" class="form-control">
+                        <option><!--JQUERY--></option>
+                    </select>
+                    <p></p>
+                    <button id='studentEintragenButton' type="button" class="btn btn-lg btn-info">eintragen</button>
+                    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+                </div>
+                <!--TOKEN ERSTELLEN-->
+                <div id="formToken" class="formStream">
+                    <h1 class="h3 mb-3 font-weight-normal">Bitte Anzahl eingeben</h1>
+                    <input type="number" id="anzahlTokenInput" class="form-control" placeholder="Anzahl Punkte [Token]" required>
+                    <h1 class="h3 mb-3 font-weight-normal">Bitte Tokenname eingeben</h1>
+                    <input type="text" id="nameTokenInput" class="form-control" placeholder="Bezeichnung" required>
+                    <p></p>
+                    <button id='tokenErstellenButton' type="button" class="btn btn-lg btn-info">erstellen</button>
+                    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+                </div>
+                <!--STREAM ERSTELLEN-->
+                <div id="formStream" class="formStream">
+                    <h1 class="h3 mb-3 font-weight-normal">Bitte Tabellenname eingeben</h1>
+                    <input type="text" id="streamNameInput" class="form-control" placeholder="Tabellenname [stream] eingeben." required>
+                    <p></p>
+                    <button id='streamErstellenButton' type="submit" class="btn btn-lg btn-info">erstellen</button>
+                    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+                </div>
+                <!--BESTANDEN-->
+                <div id="formBestanden" class="formStream">
+                    <h1 class="h3 mb-3 font-weight-normal">Bitte Matrikelnummer auswählen</h1>
+                    <select id="matrikelNrSelect" class="form-control">
+                        <option><!--JQUERY--></option>
+                    </select>
+                    <h1 class="h3 mb-3 font-weight-normal">Bitte Token auswählen</h1>
+                    <select id="tokenSelect" class="form-control">
+                        <option>
+                            <!--JQUERY-->
+                        </option>
+                    </select>
+                    <p></p>
+                    <button id='tokenSendenButton' type="submit" class="btn btn-lg btn-info">bestanden</button>
+                    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+
+    $('#menuLeft').show();
+    $('#formStream').hide();
+    $('#formStudentEintragen').hide();
+    $('#formToken').hide();
+    $('#formBestanden').hide();
+    $('#titel').text('Credits [tokens]');
+    $(document).ready(function () {
+        isSessionLogout("isSession");
+        //$('#walletErstellen').prop('disabled', true);
+        //$('#walletAbfragen').prop('disabled', true);
+        // #################
+        // Buttons disable #
+        // #################
+        //$('#streamErstellenButton').prop('disabled', true);
+        //$('#studentEintragenButton').prop('disabled', true);
+        //$('#tokenErstellenButton').prop('disabled', true);
+        //$('#tokenSendenButton').prop('disabled', true);
+        //$('#formularX').html('Formular X');
+    });
+
+    // ######
+    // Menü #
+    // ######
+    $('#explorer').click(function streamErstellen() {
+        $('#menuLeft').html('');
+        $('#menuLeft').show();
+        $('#titel').text('Credits [tokens]');
+        $('#anz').text(r.value.tokens.length);
+
+        $('#formStream').hide();
+        $('#formStudentEintragen').hide();
+        $('#formToken').hide();
+        $('#formBestanden').hide();
+        $('#tabelleStudentInfo').show();
+
+        // Linke Menü
+        $.each(r.value.tokens, function (index, value) {
+            $('#menuLeft').append(
+                '<li class="list-group-item d-flex justify-content-between align-items-center">' + value.name + '<span class="badge badge-primary badge-pill" >' + value.qty + '</span ></li>');
+        });
+        //window.location.replace(r.redirect);
+    });
+
+    // ################
+    // Menü Bestanden #
+    // ################
+    $('#tokenSendenMenu').click(function streamErstellen() {
+        $('#menuLeft').html('');
+        $('#tokenSelect').html('');
+        $('#matrikelNrSelect').html('');
+        $('#menuLeft').show();
+        $('#titel').text('Credits [tokens]');
+        $('#anz').text(r.value.tokens.length);
+
+        $('#formStream').hide();
+        $('#formStudentEintragen').hide();
+        $('#formToken').hide();
+        $('#formBestanden').show();
+        $('#tabelleStudentInfo').hide();
+
+        $('#colX ').attr("class", "class=col-5");
+
+        console.log(r);
+
+        // Seitenmenü
+        $.each(r.value.tokens, function (index, value) {
+            $('#menuLeft').append(
+                '<li class="list-group-item d-flex justify-content-between align-items-center">' + value.name + '<span class="badge badge-primary badge-pill" >' + value.qty + '</span ></li>');
+        });
+
+        for (var i = 0, l = r.value.tokens.length; i < l; i++) {
+            $('#tokenSelect').append('<option>' + r.value.tokens[i]['name'] + '</option>');
+        }
+        for (var i = 0, l = arrMtrnr.length; i < l; i++) {
+            $('#matrikelNrSelect').append('<option>' + arrMtrnr[i] + '</option>');
+        }
+
+    });
+
+    // ##############
+    // Menü Student #
+    // ##############
+    $('#studentEintragenMenu').click(function streamErstellen() {
+        $('#menuLeft').html('');
+        $('#streamsSelect').html('');
+        $('#menuLeft').show();
+        $('#titel').text('Studenten [IDs]');
+        $('#anz').text(r.value.data.length - r.value.streams.length);
+
+        $('#formStream').hide();
+        $('#formStudentEintragen').show();
+        $('#formToken').hide();
+        $('#formBestanden').hide();
+        $('#tabelleStudentInfo').hide();
+
+        $('#colX ').attr("class", "class=col-5");
+
+        console.log(r);
+
+        $('#menuLeft').append(
+            '<li class="list-group-item d-flex justify-content-between align-items-center">Tabellen [streams] <span class="badge badge-primary badge-pill" >' + r.value.streams.length + '</span ></li>');
+        $.each(r.value.streams, function (index, value) {
+            $('#streamsSelect').append(
+                '<option>'
+                + value.name +
+                '</option>');
+        });
+    });
+
+    // #############
+    // Menü Token #
+    // #############
+    $('#tokenErstellenMenu').click(function streamErstellen() {
+        $('#menuLeft').html('');
+        $('#menuLeft').show();
+        $('#titel').text('Credits [tokens]');
+        $('#anz').text(r.value.tokens.length);
+
+        $('#formStream').hide();
+        $('#formStudentEintragen').hide();
+        $('#formBestanden').hide();
+        $('#formToken').show();
+        $('#tabelleStudentInfo').hide();
+
+        $('#colX ').attr("class", "col-5");
+
+        console.log(r);
+
+        $.each(r.value.tokens, function (index, value) {
+            $('#menuLeft').append(
+                '<li class="list-group-item d-flex justify-content-between align-items-center">' + value.name + '<span class="badge badge-primary badge-pill" >' + value.qty + '</span ></li>');
+        });
+    });
+
+    // #############
+    // Menü Stream #
+    // #############
+    $('#streamErstellenMenu').click(function streamErstellen() {
+        $('#tabelleStudentInfo').hide();
+        $('#menuLeft').html('');
+        $('#menuLeft').show();
+        $('#formStream').show();
+        $('#titel').text('Tebellen [streams]');
+        $('#anz').text(r.value.streams.length);
+
+        $('#formStream').show();
+        $('#formStudentEintragen').hide();
+        $('#formToken').hide();
+        $('#formBestanden').hide();
+
+        $('#colX ').attr("class", "col-5");
+
+        console.log(r);
+
+        $.each(r.value.streams, function (index, value) {
+            $('#menuLeft').append(
+                '<li class="list-group-item d-flex justify-content-between align-items-center">'
+                + value.name +
+                '</li>');
+        });
+    });
+
+    // ##################
+    // Stream erstellen #
+    // ##################
+    $('#streamErstellenButton').click(function streamErstellen() {
+        if ($('#streamNameInput').val().length == 0) {
+            alert('leer');
+            return false;
+        }
+        $.post("../core/Server.php",
+            {
+                "function":
+                    {
+                        "name": "streamErstellen"
+                    },
+                "params":
+                    {
+                        "streamName": $('#streamNameInput').val()
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r + "\nStatus: " + status);
+            }, "json").done(function () {
+                console.log(r);
+                window.location.replace(r.redirect);
+                $.each(r.value, function (index, value) {
+                });
+            });
+    });
+
+    //###############################################
+    // Check ob Session gesetzt ist und Daten laden #
+    //###############################################
+    function isSessionLogout(func = "") {
+        $.post("../core/Server.php",
+            {
+                "function":
+                    { "name": func },
+                "params":
+                    {
+                        "": ""
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                arrMtrnr = new Array();
+                console.log("response: " + r.value + "\nStatus: " + status);
+            }, "json").done(function () {
+                if (r.info) {
+                    $('#session ').attr("class", "class=badge badge-pill badge-success"); // Admin grün
+                    //$('#streamErstellenButton').prop('disabled', false);
+                    //$('#studentEintragenButton').prop('disabled', false);
+                    //$('#tokenErstellenButton').prop('disabled', false);
+                    //$('#tokenSendenButton').prop('disabled', false);
+                    console.log(r.value.data);
+
+                    // #######
+                    // Token #
+                    // #######
+                    //for (var ii = 0, l = r.value.tokens.length; ii < l; ii++) {
+                    //$('#tokenSelect').append('<option>' + r.value.tokens[ii]['name'] + ' ∑: ' + r.value.tokens[ii]['qty'] + '</option>');
+                    //}
+
+                    // ###########
+                    // Studenten #
+                    // ###########
+                    var studentInfo = new Object();
+                    studentInfo = {
+                        'stream': "",
+                        'mtrnr': "",
+                        'wallet': "",
+                        'balance': ""
+                    }
+                    $.each(r.value.data, function (index, value) {
+                        if (jQuery.isPlainObject(value)) {
+                            $('#studentInfo').append('<tr>');
+                            $.each(value, function (index1, value1) {
+                                // #######
+                                // #
+                                // #######
+                                if (index1 == 'mtrnr') {
+                                    //$('#studentInfo').append('<span><small>ID: ' + value1 + '</small></span><br>');
+                                    //$('#mtrnr').append('<th id="" scope="row">' + value1 + '</th> ');
+                                    studentInfo.mtrnr = value1;
+                                    arrMtrnr.push(value1);
+                                    $('#studentInfo').append('<td scope="row">' + studentInfo.stream + '</td> ');
+                                    $('#studentInfo').append('<td scope="row">' + studentInfo.mtrnr + '</td> ');
+                                }
+                                // #######
+                                // #
+                                // #######
+                                if (index1 == 'wallet') {
+                                    //$('#studentInfo').append('<span><small>' + value1 + '</small></span>');
+                                    studentInfo.wallet = value1;
+                                    $('#studentInfo').append('<td scope="row">' + studentInfo.wallet + '</td> ');
+                                }
+                                // #######
+                                // #
+                                // #######
+                                if (index1 == 'balance') {
+                                    if (jQuery.isArray(value1) && !jQuery.isEmptyObject(value1)) {
+                                        for (var i2 = 0, l = value1.length; i2 < l; i2++) {
+                                            //$('#studentInfo').append('<p><small><b>Meilensteine bestanden: ' + value1[i2].qty + '</b></small></p><br>');
+                                            studentInfo.balance = value1[i2].qty;
+                                            $('#studentInfo').append('<td scope="row">' + studentInfo.balance + '</td> ');
+                                        }
+                                    } else {
+                                        //$('#studentInfo').append('<p><small><b>Meilensteine bestanden: 0 </b></small></p><br>');
+                                    }
+
+                                }
+                            });
+                        } else {
+                            //$('#studentInfo').append('<p><span class="badge badge-pill badge-warning">' + value + '</span></p>');
+                            studentInfo.stream = value;
+                        }
+
+                        $('#studentInfo').append('</tr>');
+                    });
+                    //#########
+                    // Streams#
+                    // ########
+                    // Linke Menü
+                    $('#anz').text(r.value.streams.length);
+                    //$.each(r.value.streams, function (index, value) {
+                    //$('#streamsInfo').append('<p><span class="badge badge-pill badge-warning">' + value.name + '</span></p>');
+                    //$('#streamsSelect').append('<option>' + value.name + '</option>');
+                    //});
+                    $.each(r.value.tokens, function (index, value) {
+                        $('#menuLeft').append(
+                            '<li class="list-group-item d-flex justify-content-between align-items-center">' + value.name + '<span class="badge badge-primary badge-pill" >' + value.qty + '</span ></li>');
+                    });
+                    //##########
+                    // Session #
+                    // #########
+                } else {
+                    $('#session ').attr("class", "class=badge badge-pill badge-danger");
+                }
+
+            });
+    }
+
+    // ##############
+    // Token senden #
+    // ##############
+    $('#tokenSendenButton').click(function streamErstellen() {
+        $(this).prop('disabled', true);
+        if ($('#matrikelNrSelect').val().length == 0 || $('#tokenSelect').val().length == 0) {
+            alert('leer');
+            return false;
+        }
+        $.post("../core/Server.php",
+            {
+                "function":
+                    {
+                        "name": "tokenSenden"
+                    },
+                "params":
+                    {
+                        "mtrnr": $('#matrikelNrSelect').val(),
+                        "token": $('#tokenSelect').val(),
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r + "\nStatus: " + status);
+            }, "json").done(function () {
+                console.log(r);
+                window.location.replace(r.redirect);
+                $.each(r.value, function (index, value) {
+                });
+            });
+    });
+
+    // #################
+    // Token erstellen #
+    // #################
+    $('#tokenErstellenButton').click(function streamErstellen() {
+        $(this).prop('disabled', true);
+        if ($('#anzahlTokenInput').val().length == 0 || $('#nameTokenInput').val().length == 0) {
+            alert('leer');
+            return false;
+        }
+        $.post("../core/Server.php",
+            {
+                "function":
+                    {
+                        "name": "tokenErstellen"
+                    },
+                "params":
+                    {
+                        "tokenName": $('#nameTokenInput').val(),
+                        "tokenAnzahl": $('#anzahlTokenInput').val(),
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r + "\nStatus: " + status);
+            }, "json").done(function () {
+                console.log(r);
+                window.location.replace(r.redirect);
+                $.each(r.value, function (index, value) {
+                });
+            });
+    });
+
+    // ###################
+    // Student eintragen #
+    // ###################
+    $('#studentEintragenButton').click(function streamErstellen() {
+        $(this).prop('disabled', true);
+        if ($('#studentEintragenInput').val().length == 0 || $('#streamsSelect').val().length == 0) {
+            alert('leer');
+            return false;
+        }
+        $.post("../core/Server.php",
+            {
+                "function":
+                    {
+                        "name": "studentEintragen"
+                    },
+                "params":
+                    {
+                        "id": $('#studentEintragenInput').val(),
+                        "streamName": $('#streamsSelect').val()
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r + "\nStatus: " + status);
+            }, "json").done(function () {
+                console.log(r);
+                window.location.replace(r.redirect);
+                $.each(r.value, function (index, value) {
+                });
+            });
+    });
+
+    //#########
+    // Zurück #
+    //#########
+    $('#back').click(function () {
+        window.location.replace("/ba/gui/login.html");
+    });
+    //########
+    // Logout#
+    //########
+    $('#logoutButton').click(function () {
+        isSessionLogout("logout");
+        window.location.replace("/ba/gui/login.html");
+    });
+
+</script>
+
+</html>

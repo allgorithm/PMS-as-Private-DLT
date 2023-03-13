@@ -1,0 +1,112 @@
+<!DOCTYPE html >
+<html>
+
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8" />
+    <script src="../../jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="../../bootstrap-4.0.0-dist/css/bootstrap.min.css">
+</head>
+
+<body color="black">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h1 class="display-4">Login</h1>
+                        <p class="lead">
+                            <b>Student: Matrikelnummer - Datenbank - Tabelle</b>
+                        </p>
+                        <p class="lead">
+                            <b>Betreuer: Walletnummer - Datenbank - Passwort</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id=''>
+        <div class="row">
+            <div id='formularLogin' class="col">
+                <div class="container">
+                    <div class="card border-info mb-3" style="max-width: 22rem;">
+                        <div id='formularX' class="card-header">Formular ...</div>
+                        <div class="card-body text-info">
+                            <h5 class="card-title">Bitte ausfüllen.</h5>
+                            <p class="card-text">
+                                <input type="text" id="matrikelNummerInput" class="form-control" placeholder="Bitte Matrikelnummer eingeben." value="1QDD9VhVdL41bniVTVTKRjzBr292KrGrhQeB7H">
+                                <input type="text" id="blockchainNameInput" class="form-control" placeholder="Bitte Blockchainname eingeben." value="verwaltung2">
+                                <input type="text" id="streamNameInput" class="form-control" placeholder="Bitte Streamname eingeben." value="gruppe1">
+                                <input type="password" id="pinInput" class="form-control" placeholder="Bitte PIN eingeben." value="">
+                                <input type="hidden" id="functionX" class="form-control">
+                            </p>
+                            <button id='login' type="button" class="btn btn-success">login</button>
+                            <button id='userButton' type="button" class="btn btn-dark">user</button>
+                            <button id='adminButton' type="button" class="btn btn-dark">admin</button>
+                            <!--<button id='stream' type="button" class="btn btn-info">stream</button>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+
+    $('#userButton').prop('disabled', true);
+    $('#pinInput').hide();
+
+    $(document).ready(function () {
+
+    });
+
+    // BUTTONS
+    $('#adminButton').click(function () {
+        $('#pinInput').show();
+        $(this).prop('disabled', true);
+        $('#userButton').prop('disabled', false);
+        $('#blockchainName').hide();
+        $('#streamNameInput').hide();
+    });
+
+    $('#userButton').click(function () {
+        $('#pinInput').hide();
+        $(this).prop('disabled', true);
+        $('#adminButton').prop('disabled', false);
+        $('#streamNameInput').show();
+    });
+
+    $("#login").click(function () {
+        $('#functionX').val('login'); // Funktion setzen vom hidden Input
+        // Validiere ob leer 2DO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        var admin = $('#adminButton').is(':disabled') ? true : false; // Info
+        // Daten aus dem Formular sammeln
+
+        console.log($('#matrikelNummerInput').val());
+        // Daten Senden
+        $.post("../core/Server.php",
+            {
+                "function":
+                    { "name": $("#functionX").val() },
+                "params":
+                    {
+                        "matrikelnummer": $('#matrikelNummerInput').val(), // ID <-> primary key
+                        "blockchainName": $('#blockchainNameInput').val(), // Blockchain <-> Datenbank <-> Termin Gruppe X
+                        "streamName": $('#streamNameInput').val(), // Tabelle <-> Datenbank <-> Gruppe X
+                        "pin": $('#pinInput').val()
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + data.result.redirect + "\nStatus: " + status);
+            }, "json").done(function () {
+                window.location.replace(r.redirect);
+            });
+    });
+
+</script>
+
+</html>

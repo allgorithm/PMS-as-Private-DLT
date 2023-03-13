@@ -1,0 +1,381 @@
+<!DOCTYPE html >
+<html>
+
+<head>
+    <title>Admin</title>
+    <meta charset="UTF-8" />
+    <script src="../../jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="../../bootstrap-4.0.0-dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h1 class="display-4">Adminbereich</h1>
+                        <p class="lead">Dem Betreuer stehen hier unterschiedliche Verwaltungsfunktionen und Informationen zur Verfügung.</p>
+                        <button id='back' type="button" class="btn btn-warning">Zurück</button>
+                    </div>
+                </div>
+                <span id="session" class="badge badge-pill badge-danger">√</span>
+                <p>
+                    <button id='logoutButton' type="button" class="btn btn-danger">logout</button>
+                </p>
+            </div>
+        </div>
+        <div id='divFunktionen'>
+            <div class="row">
+                <!-- Studenten verwalten -->
+                <div class="col">
+                    <div class="card border-info mb-3" style="max-width: 22rem;">
+                        <div class="card-header">Verwalten</div>
+                        <div class="card-body text-info">
+                            <h5 class="card-title">Studenten</h5>
+                            <p class="card-text">
+                                <p>
+                                    <input type="text" id="studentEintragenInput" class="form-control" placeholder="matrikelnummer [ID]">
+                                </p>
+                                <p>
+                                    <select id="streamsSelect" class="form-control" id="exampleFormControlSelect1">
+                                        <option></option>
+                                    </select>
+                                </p>
+                                <button id='studentEintragenButton' type="button" class="btn btn-info">Student eintragen</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Wallets verwalten -->
+                <div class="col">
+                    <div class="card border-info mb-3" style="max-width: 22rem;">
+                        <div class="card-header">Wallets verwalten</div>
+                        <div class="card-body text-info">
+                            <h5 class="card-title">Funktionen</h5>
+                            <p class="card-text">
+                                <button id='walletErstellen' type="button" class="btn btn-info">Wallet erstellen</button>
+                            </p>
+                            <p class="card-text">
+                                <button id='walletAbfragen' type="button" class="btn btn-info">Wallet abfragen</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Meilensteine verwalten -->
+                <div class="col">
+                    <div class="card border-info mb-3" style="max-width: 22rem;">
+                        <div class="card-header">Verwalten</div>
+                        <div class="card-body text-info">
+                            <h5 class="card-title">Meilensteine [Token]</h5>
+                            <p class="card-text">
+                                <input type="text" id="anzahlTokenInput" class="form-control" placeholder="Anzahl [Token]">
+                            </p>
+                            <p>
+                                <input type="text" id="nameTokenInput" class="form-control" placeholder="Bezeichnung">
+                            </p>
+                            <p class="card-text">
+                                <button id='tokenErstellenButton' type="button" class="btn btn-info">erstellen</button>
+                            </p>
+                            <p>
+                                <input type="text" id="matrikelNrInput" class="form-control" placeholder="matrikelnummer [ID]">
+                            </p>
+                            <p>
+                                <select id="tokenSelect" class="form-control" id="exampleFormControlSelect1">
+                                    <option></option>
+                                </select>
+                            </p>
+                            <p class="card-text">
+                                <button id='tokenSendenButton' type="button" class="btn btn-info">Meilenstein bestanden</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Streams verwalten -->
+            <div class="col">
+                <div class="card border-info mb-3" style="max-width: 22rem;">
+                    <div class="card-header">Verwalten </div>
+                    <div class="card-body text-info">
+                        <h5 class="card-title">Streams [Tabellen]</h5>
+                        <p class="card-text">
+                            <p>
+                                <input type="text" id="streamNameInput" class="form-control" placeholder="stream [Tabelle]">
+                            </p>
+                            <button id='streamErstellenButton' type="button" class="btn btn-info">Stream erstellen</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Studenten Info -->
+            <div class="col">
+                <div class="card border-info mb-3" style="max-width: 22rem;">
+                    <div class="card-header">Info</div>
+                    <div class="card-body text-info">
+                        <h5 class="card-title">Studenten</h5>
+                        <p id="studentInfo" class="card-text">
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Streams Info -->
+            <div class="col">
+                <div class="card border-info mb-3" style="max-width: 22rem;">
+                    <div class="card-header">Info </div>
+                    <div class="card-body text-info">
+                        <h5 class="card-title">Streams [Tabellen]</h5>
+                        <p id="streamsInfo" class="card-text">
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+
+    $(document).ready(function () {
+        isSessionLogout("isSession");
+        $('#walletErstellen').prop('disabled', true);
+        $('#walletAbfragen').prop('disabled', true);
+        // #################
+        // Buttons disable #
+        // #################
+        $('#streamErstellenButton').prop('disabled', true);
+        $('#studentEintragenButton').prop('disabled', true);
+        $('#tokenErstellenButton').prop('disabled', true);
+        $('#tokenSendenButton').prop('disabled', true);
+        //$('#formularX').html('Formular X');
+    });
+
+    // ##############
+    // Token senden #
+    // ##############
+    $('#tokenSendenButton').click(function streamErstellen() {
+        if ($('#matrikelNrInput').val().length == 0 || $('#tokenSelect').val().length == 0) {
+            alert('leer');
+            return false;
+        }
+        $.post("../core/Server.php",
+            {
+                "function":
+                    {
+                        "name": "tokenSenden"
+                    },
+                "params":
+                    {
+                        "mtrnr": $('#matrikelNrInput').val(),
+                        "token": $('#tokenSelect').val(),
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r + "\nStatus: " + status);
+            }, "json").done(function () {
+                console.log(r);
+                window.location.replace(r.redirect);
+                $.each(r.value, function (index, value) {
+                });
+            });
+    });
+
+    // #################
+    // Token erstellen #
+    // #################
+    $('#tokenErstellenButton').click(function streamErstellen() {
+        if ($('#anzahlTokenInput').val().length == 0 || $('#nameTokenInput').val().length == 0) {
+            alert('leer');
+            return false;
+        }
+        $.post("../core/Server.php",
+            {
+                "function":
+                    {
+                        "name": "tokenErstellen"
+                    },
+                "params":
+                    {
+                        "tokenName": $('#nameTokenInput').val(),
+                        "tokenAnzahl": $('#anzahlTokenInput').val(),
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r + "\nStatus: " + status);
+            }, "json").done(function () {
+                console.log(r);
+                window.location.replace(r.redirect);
+                $.each(r.value, function (index, value) {
+                });
+            });
+    });
+
+    // ###################
+    // Student eintragen #
+    // ###################
+    $('#studentEintragenButton').click(function streamErstellen() {
+        if ($('#studentEintragenInput').val().length == 0 || $('#streamsSelect').val().length == 0) {
+            alert('leer');
+            return false;
+        }
+        $.post("../core/Server.php",
+            {
+                "function":
+                    {
+                        "name": "studentEintragen"
+                    },
+                "params":
+                    {
+                        "id": $('#studentEintragenInput').val(),
+                        "streamName": $('#streamsSelect').val()
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r + "\nStatus: " + status);
+            }, "json").done(function () {
+                console.log(r);
+                window.location.replace(r.redirect);
+                $.each(r.value, function (index, value) {
+                });
+            });
+    });
+
+    // ##################
+    // Stream erstellen #
+    // ##################
+    $('#streamErstellenButton').click(function streamErstellen() {
+        if ($('#streamNameInput').val().length == 0) {
+            alert('leer');
+            return false;
+        }
+        $.post("../core/Server.php",
+            {
+                "function":
+                    {
+                        "name": "streamErstellen"
+                    },
+                "params":
+                    {
+                        "streamName": $('#streamNameInput').val()
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r + "\nStatus: " + status);
+            }, "json").done(function () {
+                console.log(r);
+                window.location.replace(r.redirect);
+                $.each(r.value, function (index, value) {
+                });
+            });
+    });
+
+    //###############################################
+    // Check ob Session gesetzt ist und Daten laden #
+    //###############################################
+    function isSessionLogout(func = "") {
+        $.post("../core/Server.php",
+            {
+                "function":
+                    { "name": func },
+                "params":
+                    {
+                        "": ""
+                    }
+            },
+            function (data, status) {
+                r = data.result;
+                console.log("response: " + r.info + "\nStatus: " + status);
+            }, "json").done(function () {
+                if (r.info) {
+                    $('#session ').attr("class", "class=badge badge-pill badge-success");
+                    $('#streamErstellenButton').prop('disabled', false);
+                    $('#studentEintragenButton').prop('disabled', false);
+                    $('#tokenErstellenButton').prop('disabled', false);
+                    $('#tokenSendenButton').prop('disabled', false);
+                    console.log(r.value.data);
+
+                    // #######
+                    // Token #
+                    // #######
+                    for (var ii = 0, l = r.value.adminData.length; ii < l; ii++) {
+                        $('#tokenSelect').append('<option>' + r.value.adminData[ii]['name'] + ' ∑: ' + r.value.adminData[ii]['qty'] + '</option>');
+                    }
+
+                    // ###########
+                    // Studenten #
+                    // ###########
+                    $.each(r.value.data, function (index, value) {
+                        if (jQuery.isPlainObject(value)) {
+                            $.each(value, function (index1, value1) {
+                                // #######
+                                // #
+                                // #######
+                                if (index1 == 'mtrnr') {
+                                    $('#studentInfo').append('<span><small>ID: ' + value1 + '</small></span><br>');
+                                }
+                                // #######
+                                // #
+                                // #######
+                                if (index1 == 'wallet') {
+                                    $('#studentInfo').append('<span><small>' + value1 + '</small></span>');
+                                }
+                                // #######
+                                // #
+                                // #######
+                                if (index1 == 'balance') {
+                                    if (jQuery.isArray(value1) && !jQuery.isEmptyObject(value1)) {
+                                        for (var i2 = 0, l = value1.length; i2 < l; i2++) {
+                                            $('#studentInfo').append('<p><small><b>Meilensteine bestanden: ' + value1[i2].qty + '</b></small></p><br>');
+                                        }
+                                    } else {
+                                        $('#studentInfo').append('<p><small><b>Meilensteine bestanden: 0 </b></small></p><br>');
+                                    }
+
+                                }
+                            });
+                        } else {
+                            $('#studentInfo').append('<p><span class="badge badge-pill badge-warning">' + value + '</span></p>');
+                        }
+                    });
+                    //#########
+                    // Streams#
+                    // ########
+                    $.each(r.value.streams, function (index, value) {
+                        $('#streamsInfo').append('<p><span class="badge badge-pill badge-warning">' + value.name + '</span></p>');
+                        $('#streamsSelect').append('<option>' + value.name + '</option>');
+                    });
+                    //##########
+                    // Session #
+                    // #########
+                } else {
+                    $('#session ').attr("class", "class=badge badge-pill badge-danger");
+                }
+
+            });
+    }
+    //#########
+    // Zurück #
+    //#########
+    $('#back').click(function () {
+        window.location.replace("/ba/gui/login.html");
+    });
+    //########
+    // Logout#
+    //########
+    $('#logoutButton').click(function () {
+        isSessionLogout("logout");
+        window.location.replace("/ba/gui/login.html");
+    });
+
+</script>
+
+</html>
